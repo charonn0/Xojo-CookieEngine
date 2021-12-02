@@ -69,7 +69,9 @@ Protected Class CookieEngine
 
 	#tag Method, Flags = &h0
 		Function Domain(Index As Integer) As String
-		  Return mCookies(Index).Value("domain")
+		  ' If the specified cookie has a "domain" attribute then it is returned.
+		  
+		  Return mCookies(Index).Lookup("domain", "")
 		End Function
 	#tag EndMethod
 
@@ -290,7 +292,9 @@ Protected Class CookieEngine
 
 	#tag Method, Flags = &h0
 		Function Path(Index As Integer) As String
-		  Return mCookies(Index).Value("path")
+		  ' If the cookie has the "path" attribute then it is returned.
+		  
+		  Return mCookies(Index).Lookup("path", "")
 		End Function
 	#tag EndMethod
 

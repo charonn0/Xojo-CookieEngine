@@ -5,6 +5,11 @@ Protected Class CookieEngine
 		  ' Compares Hostname1 and Hostname2 to determine whether they belong to the same subdomain.
 		  ' For example 'api.example.com' matches 'example.com' and 'api.example.com' but not 'www.example.com'
 		  
+		  Dim d As Dictionary = ParseURL(Hostname1)
+		  Hostname1 = d.Value("host")
+		  d = ParseURL(Hostname2)
+		  Hostname2 = d.Value("host")
+		  
 		  Dim tmp() As String = Split(Hostname1, ".")
 		  Dim h1() As String
 		  For i As Integer = 0 To UBound(tmp)
@@ -315,6 +320,8 @@ Protected Class CookieEngine
 		  End If
 		  cookie.Value("name") = Name
 		  cookie.Value("value") = Value
+		  Dim d As Dictionary = ParseURL(Domain)
+		  Domain = d.Value("host")
 		  cookie.Value("domain") = Domain
 		  If Expires <> Nil Then cookie.Value("expires") = Expires
 		  If Path <> "" Then cookie.Value("path") = Path

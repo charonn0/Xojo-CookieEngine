@@ -1,54 +1,5 @@
 #tag Class
 Protected Class CookieEngine
-	#tag Method, Flags = &h0
-		Sub CollectCookiesFromHeaders(URL As String, ResponseHeaders As InternetHeaders)
-		  For i As Integer = 0 To ResponseHeaders.Count - 1
-		    If ResponseHeaders.Name(i) = "Set-Cookie" Then
-		      Dim nm, vl, dm, pth, meta, data As String
-		      Dim ex As Date
-		      data = NthField(ResponseHeaders.Value(i), ";", 1)
-		      meta = NthField(ResponseHeaders.Value(i), data + ";", 2).Trim
-		      
-		      nm = NthField(data, "=", 1)
-		      vl = NthField(data, nm + "=", 2)
-		      
-		      If meta <> "" Then
-		        Dim items() As String = Split(meta, ";")
-		        For Each item As String In items
-		          Dim k, v As String
-		          k = NthField(item, "=", 1)
-		          v = NthField(item, "=", 2)
-		          Select Case k.Trim
-		          Case "Domain"
-		            dm = v
-		          Case "Path"
-		            pth = v
-		          Case "Expires"
-		            ex = TimeStamp(v)
-		          End Select
-		        Next
-		      End If
-		      
-		      Me.SetCookie(nm, vl, dm, ex, pth)
-		    End If
-		  Next
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub CollectCookiesFromHeaders(URL As String, ResponseHeaders As Iterable)
-		  ' For use with the URLConnection class. If you're seeing compile errors in this method it's because
-		  ' you're using an older version of Xojo that doesn't have the URLConnection class. Simply delete this
-		  ' method to eliminate the errors and use the other CollectCookiesFromHeaders method.
-		  
-		  Dim h As New InternetHeaders
-		  For Each header As Pair In ResponseHeaders
-		    h.AddHeader(header.Left, header.Right)
-		  Next
-		  CollectCookiesFromHeaders(URL, h)
-		End Sub
-	#tag EndMethod
-
 	#tag Method, Flags = &h21
 		Private Shared Function CompareDomains(Hostname1 As String, Hostname2 As String) As Boolean
 		  ' Compares Hostname1 and Hostname2 to determine whether they belong to the same subdomain.
@@ -137,7 +88,14 @@ Protected Class CookieEngine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function GenerateCookieHeader(URL As String) As String
+		Function GenerateRequestHeader(URL As String) As String
+		  ' Generates an HTTP response header field for the specified URL.
+		  ' Use the return value to set the Cookie header in your HTTP request:
+		  '
+		  '    MyURLConnection.RequestHeader("Cookie") = ReturnValue
+		  '  or
+		  '    MyHTTPSocket.SetRequestHeader("Cookie", ReturnValue)
+		  
 		  Dim i As Integer = Me.Lookup("", URL, 0)
 		  Dim cookies() As String
 		  Do Until i <= -1
@@ -179,7 +137,58 @@ Protected Class CookieEngine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub ParseResponseHeaders(URL As String, ResponseHeaders As InternetHeaders)
+		  ' Collect all the Set-Cookie: headers in the specified HTTP response headers.
+		  ' If a Set-Cookie: header specifies a domain other than the one contained in the 
+		  ' URL parameter then an exception will be raised.
+		  
+		  For i As Integer = 0 To ResponseHeaders.Count - 1
+		    If ResponseHeaders.Name(i) = "Set-Cookie" Then
+		      Dim nm, vl, dm, pth, meta, data As String
+		      Dim d As Dictionary = ParseURL(URL)
+		      dm = d.Value("host")
+		      Dim ex As Date
+		      data = NthField(ResponseHeaders.Value(i), ";", 1)
+		      meta = NthField(ResponseHeaders.Value(i), data + ";", 2).Trim
+		      
+		      nm = NthField(data, "=", 1)
+		      vl = NthField(data, nm + "=", 2)
+		      
+		      If meta <> "" Then
+		        Dim items() As String = Split(meta, ";")
+		        For Each item As String In items
+		          Dim k, v As String
+		          k = NthField(item, "=", 1)
+		          v = NthField(item, "=", 2)
+		          Select Case k.Trim
+		          Case "Domain"
+		            If Not CompareDomains(v, URL) Then Raise New RuntimeException
+		            dm = v
+		          Case "Path"
+		            pth = v
+		          Case "Expires"
+		            ex = TimeStamp(v)
+		          End Select
+		        Next
+		      End If
+		      
+		      Me.SetCookie(nm, vl, dm, ex, pth)
+		    End If
 		  Next
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub ParseResponseHeaders(URL As String, ResponseHeaders As Iterable)
+		  ' For use with the URLConnection class. If you're seeing compile errors in this method it's because
+		  ' you're using an older version of Xojo that doesn't have the URLConnection class. Simply delete this
+		  ' method to eliminate the errors.
+		  
+		  Dim h As New InternetHeaders
+		  For Each header As Pair In ResponseHeaders
+		    h.AddHeader(header.Left, header.Right)
+		  Next
+		  ParseResponseHeaders(URL, h)
 		End Sub
 	#tag EndMethod
 

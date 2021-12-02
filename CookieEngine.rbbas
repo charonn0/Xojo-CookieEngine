@@ -100,7 +100,7 @@ Protected Class CookieEngine
 		  Dim cookies() As String
 		  Do Until i <= -1
 		    cookies.Append(Me.Name(i) + "=" + Me.Value(i))
-		    i = Me.Lookup("", "", i + 1)
+		    i = Me.Lookup("", URL, i + 1)
 		  Loop
 		  
 		  Return Join(cookies, "; ")

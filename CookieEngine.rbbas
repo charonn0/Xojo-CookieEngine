@@ -121,6 +121,29 @@ Protected Class CookieEngine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub Load(CookieJar As FolderItem)
+		  Dim tis As TextInputStream = TextInputStream.Open(CookieJar)
+		  While Not tis.EOF
+		    Dim line As String = tis.ReadLine
+		    If Left(line.Trim, 1) = "#" Or Line = "" Then Continue ' comment line
+		    If CountFields(Line, Chr(9)) <> 7 Then Continue ' Raise New UnsupportedFormatException
+		    Dim domain, flag, path, secure, expiration, name, value As String
+		    domain = NthField(line, Chr(9), 1)
+		    flag = NthField(line, Chr(9), 2)
+		    path = NthField(line, Chr(9), 3)
+		    secure = NthField(line, Chr(9), 4)
+		    expiration = NthField(line, Chr(9), 5)
+		    name = NthField(line, Chr(9), 6)
+		    value = NthField(line, Chr(9), 7)
+		    Dim exp As New Date(1970, 1, 1, 0, 0, 0, 0.0) 'UNIX epoch
+		    exp.TotalSeconds = exp.TotalSeconds + Val(expiration)
+		    mCookies.Append(New Dictionary("name":name, "value":value, "domain":domain, "path":path, "secure":secure = "TRUE", "expires":exp))
+		  Wend
+		  tis.Close
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function Lookup(CookieName As String, CookieDomain As String, StartWith As Integer = 0) As Integer
 		  ' Locates the index of the cookie matching the CookieName and CookieDomain parameters. To continue searching from
 		  ' a previous index specify the StartWith parameter. If CookieDomain is "" then all domains match. If CookieName
@@ -301,6 +324,32 @@ Protected Class CookieEngine
 		  
 		  Return mCookies(Index).Lookup("path", "")
 		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Save(CookieJar As FolderItem, IncludeSessionCookies As Boolean = False)
+		  Dim tos As TextOutputStream = TextOutputStream.Create(CookieJar)
+		  tos.Delimiter = EndOfLine.Windows
+		  tos.WriteLine("# Netscape HTTP Cookie File")
+		  tos.WriteLine("# Domain" + Chr(9) + "Flag" + Chr(9) + "Path" + Chr(9) + "Secure" + Chr(9) + "Expiration" + Chr(9) + "Name" + Chr(9) + "Value")
+		  For i As Integer = 0 To UBound(mCookies)
+		    Dim d As Dictionary = mCookies(i)
+		    Dim secure, expires As String
+		    If d.Lookup("secure", False) Then secure = "TRUE" Else secure = "FALSE"
+		    Dim expiry As Date = d.Lookup("expires", Nil)
+		    If expiry = Nil Then
+		      If Not IncludeSessionCookies Then Continue
+		      expires = "0"
+		    Else
+		      Dim epoch As New Date(1970, 1, 1, 0, 0, 0, 0.0) 'UNIX epoch
+		      expires = Format(expiry.TotalSeconds - epoch.TotalSeconds, "###############################0")
+		    End If
+		    tos.WriteLine(d.Value("domain") + Chr(9) + "TRUE" + Chr(9) + d.Lookup("path", "/") + Chr(9) + secure _
+		    + Chr(9) + expires + Chr(9) + d.Value("name") + Chr(9) + d.Value("value"))
+		  Next
+		  tos.WriteLine("")
+		  tos.Close
+		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0

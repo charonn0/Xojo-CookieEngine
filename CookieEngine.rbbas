@@ -75,12 +75,18 @@ Protected Class CookieEngine
 
 	#tag Method, Flags = &h0
 		Function Expires(Index As Integer) As Date
+		  ' If the specified cookie has a "expires" attribute then it is returned.
+		  ' If this method returns NIL then the cookie expires at the end of the session.
+		  
 		  Return mCookies(Index).Lookup("expires", Nil)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub Expires(Index As Integer, Assigns NewExpiry As Date)
+		  ' Updates or removes the expiration date attribute of the specified cookie.
+		  ' Setting the expiration to NIL makes the cookie a "session" cookie.
+		  
 		  Dim cookie As Dictionary = mCookies(Index)
 		  If cookie.HasKey("expires") Then cookie.Remove("expires")
 		  If NewExpiry <> Nil Then cookie.Value("expires") = NewExpiry
@@ -132,6 +138,8 @@ Protected Class CookieEngine
 
 	#tag Method, Flags = &h0
 		Function Name(Index As Integer) As String
+		  ' Returns the name of the specified cookie.
+		  
 		  Return mCookies(Index).Value("name")
 		End Function
 	#tag EndMethod
@@ -288,6 +296,11 @@ Protected Class CookieEngine
 
 	#tag Method, Flags = &h0
 		Sub SetCookie(Name As String, Value As String, Domain As String, Optional Expires As Date, Optional Path As String)
+		  ' Sets a cookie for the cookie engine to use. If a cookie with the same name
+		  ' and domain already exists it will be updated. If no domain is specified then
+		  ' the cookie will be sent with all transfers and cannot be modified by a server-set
+		  ' cookie; always specify a domain if more than one server will be contacted.
+		  
 		  Dim cookie As Dictionary
 		  Dim index As Integer = Me.Lookup(Name, Domain)
 		  If index > -1 Then

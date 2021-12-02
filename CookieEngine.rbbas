@@ -78,6 +78,45 @@ Protected Class CookieEngine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub Delete(Index As Integer)
+		  ' Removes the specified cookie.
+		  
+		  mCookies.Remove(Index)
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub DeleteAll()
+		  ' Removes all cookies.
+		  
+		  Redim mCookies(-1)
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub DeleteExpired()
+		  ' Removes all expired cookies.
+		  
+		  Dim now As New Date
+		  For i As Integer = Me.Count - 1 DownTo 0
+		    If Me.Expires(i) = Nil Then Continue
+		    If Me.Expires(i).TotalSeconds < now.TotalSeconds Then mCookies.Remove(i)
+		  Next
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub DeleteSession()
+		  ' Removes all session cookies.
+		  
+		  Dim now As New Date
+		  For i As Integer = Me.Count - 1 DownTo 0
+		    If Me.Expires(i) = Nil Then mCookies.Remove(i)
+		  Next
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function Domain(Index As Integer) As String
 		  Return mCookies(Index).Value("domain")
 		End Function
@@ -140,9 +179,6 @@ Protected Class CookieEngine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub NewSession()
-		  For i As Integer = Me.Count - 1 DownTo 0
-		    If Me.Expires(i) = Nil Then mCookies.Remove(i)
 		  Next
 		End Sub
 	#tag EndMethod

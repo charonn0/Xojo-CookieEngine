@@ -354,9 +354,7 @@ Protected Class CookieEngine
 	#tag Method, Flags = &h0
 		Sub SetCookie(Name As String, Value As String, Domain As String, Optional Expires As Date, Optional Path As String)
 		  ' Sets a cookie for the cookie engine to use. If a cookie with the same name
-		  ' and domain already exists it will be updated. If no domain is specified then
-		  ' the cookie will be sent with all transfers and cannot be modified by a server-set
-		  ' cookie; always specify a domain if more than one server will be contacted.
+		  ' and domain already exists it will be updated. 
 		  
 		  Dim cookie As Dictionary
 		  Dim index As Integer = Me.Lookup(Name, Domain)

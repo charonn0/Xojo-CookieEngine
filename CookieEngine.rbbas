@@ -101,7 +101,7 @@ Protected Class CookieEngine
 
 	#tag Method, Flags = &h0
 		Function GenerateRequestHeader(URL As String) As String
-		  ' Generates an HTTP response header field for the specified URL.
+		  ' Generates an HTTP request header field for the specified URL.
 		  ' Use the return value to set the Cookie header in your HTTP request:
 		  '
 		  '    MyURLConnection.RequestHeader("Cookie") = ReturnValue

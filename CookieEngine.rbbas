@@ -65,7 +65,6 @@ Protected Class CookieEngine
 		Sub DeleteSession()
 		  ' Removes all session cookies.
 		  
-		  Dim now As New Date
 		  For i As Integer = Me.Count - 1 DownTo 0
 		    If Me.Expires(i) = Nil Then mCookies.Remove(i)
 		  Next

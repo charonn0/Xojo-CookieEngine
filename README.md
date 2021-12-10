@@ -1,6 +1,6 @@
 # Xojo-CookieEngine
 
-The `CookieEngine` class implements web browser-like HTTP cookie management (a "cookie engine"). It can be used with the Realstudio HTTPSocket, Xojo.Net.HttpSocket, Xojo URLConnection, or any other HTTP client.
+The [CookieEngine](https://github.com/charonn0/Xojo-CookieEngine/wiki/CookieEngine) class implements web browser-like HTTP cookie management (a "cookie engine"). It can be used with the Realstudio HTTPSocket, Xojo.Net.HttpSocket, Xojo URLConnection, or any other HTTP client.
 
 If you are on an older version of Xojo (or still using RealStudio) then you must delete the `ParseResponseHeaders(URL As String, ResponseHeaders As Iterable)` method before using this class. Leave the other `ParseResponseHeaders` method intact.
 

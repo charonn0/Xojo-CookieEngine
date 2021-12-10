@@ -156,8 +156,9 @@ Protected Class CookieEngine
 		    Dim n, d As String
 		    n = Me.Name(i)
 		    If CookieName = "" Or n = CookieName Then
+		      If CookieDomain = "" Then Return i
 		      d = Me.Domain(i)
-		      If d = "" And CookieDomain = "" Then Return i
+		      If d = "" Then Return i
 		      If CompareDomains(CookieDomain, d) Then Return i
 		    End If
 		  Next

@@ -184,6 +184,8 @@ Protected Class CookieEngine
 		  ' If a Set-Cookie: header specifies a domain other than the one contained in the 
 		  ' URL parameter then an exception will be raised.
 		  
+		  If ResponseHeaders = Nil Then Return
+		  
 		  For i As Integer = 0 To ResponseHeaders.Count - 1
 		    If ResponseHeaders.Name(i) = "Set-Cookie" Then
 		      Dim nm, vl, dm, pth, meta, data As String
@@ -226,6 +228,7 @@ Protected Class CookieEngine
 		  ' you're using an older version of Xojo that doesn't have the URLConnection class. Simply delete this
 		  ' method to eliminate the errors.
 		  
+		  If ResponseHeaders = Nil Then Return
 		  Dim h As New InternetHeaders
 		  For Each header As Pair In ResponseHeaders
 		    h.AddHeader(header.Left, header.Right)

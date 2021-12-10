@@ -110,8 +110,12 @@ Protected Class CookieEngine
 		  
 		  Dim i As Integer = Me.Lookup("", URL, 0)
 		  Dim cookies() As String
+		  Dim now As New Date
 		  Do Until i <= -1
-		    cookies.Append(Me.Name(i) + "=" + Me.Value(i))
+		    Dim expire As Date = Me.Expires(i)
+		    If expire = Nil Or expire.TotalSeconds > now.TotalSeconds Then
+		      cookies.Append(Me.Name(i) + "=" + Me.Value(i))
+		    End If
 		    i = Me.Lookup("", URL, i + 1)
 		  Loop
 		  

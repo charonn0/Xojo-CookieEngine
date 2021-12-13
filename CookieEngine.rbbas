@@ -1,7 +1,7 @@
 #tag Class
 Protected Class CookieEngine
 	#tag Method, Flags = &h21
-		Private Shared Function CompareDomains(Hostname1 As String, Hostname2 As String) As Boolean
+		Private Shared Function CompareDomains(Hostname1 As String, Hostname2 As String, SubdomainsMatch As Boolean) As Boolean
 		  ' Compares Hostname1 and Hostname2 to determine whether they belong to the same subdomain.
 		  ' For example 'api.example.com' matches 'example.com' and 'api.example.com' but not 'www.example.com'
 		  
@@ -9,6 +9,8 @@ Protected Class CookieEngine
 		  Hostname1 = d.Value("host")
 		  d = ParseURL(Hostname2)
 		  Hostname2 = d.Value("host")
+		  
+		  If Not SubdomainsMatch Then Return Hostname1 = Hostname2
 		  
 		  Dim tmp() As String = Split(Hostname1, ".")
 		  Dim h1() As String
@@ -124,15 +126,39 @@ Protected Class CookieEngine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function HostOnly(Index As Integer) As Boolean
+		  ' If True then only send this cookie if the domain is exactly the same.
+		  
+		  Return mCookies(Index).Lookup("hostonly", False)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub HostOnly(Index As Integer, Assigns NewValue As Boolean)
+		  ' If True then only send this cookie if the domain is exactly the same.
+		  
+		  mCookies(Index).Value("hostonly") = NewValue
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function HTTPOnly(Index As Integer) As Boolean
+		  ' If True then this cookie should not be availble to non-HTTP apis (for example from javascript).
+		  
+		  Return mCookies(Index).Lookup("httponly", False)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub Load(CookieJar As FolderItem)
 		  Dim tis As TextInputStream = TextInputStream.Open(CookieJar)
 		  While Not tis.EOF
 		    Dim line As String = tis.ReadLine
 		    If Left(line.Trim, 1) = "#" Or Line = "" Then Continue ' comment line
 		    If CountFields(Line, Chr(9)) <> 7 Then Continue ' Raise New UnsupportedFormatException
-		    Dim domain, flag, path, secure, expiration, name, value As String
+		    Dim domain, hostonly, path, secure, expiration, name, value As String
 		    domain = NthField(line, Chr(9), 1)
-		    flag = NthField(line, Chr(9), 2)
+		    hostonly = NthField(line, Chr(9), 2)
 		    path = NthField(line, Chr(9), 3)
 		    secure = NthField(line, Chr(9), 4)
 		    expiration = NthField(line, Chr(9), 5)
@@ -140,7 +166,8 @@ Protected Class CookieEngine
 		    value = NthField(line, Chr(9), 7)
 		    Dim exp As New Date(1970, 1, 1, 0, 0, 0, 0.0) 'UNIX epoch
 		    exp.TotalSeconds = exp.TotalSeconds + Val(expiration)
-		    mCookies.Append(New Dictionary("name":name, "value":value, "domain":domain, "path":path, "secure":secure = "TRUE", "expires":exp))
+		    mCookies.Append(New Dictionary("name":name, "value":value, "domain":domain, "path":path, _
+		    "secure":secure = "TRUE", "expires":exp, "hostonly":hostonly = "TRUE"))
 		  Wend
 		  tis.Close
 		End Sub
@@ -150,7 +177,7 @@ Protected Class CookieEngine
 		Function Lookup(CookieName As String, CookieDomain As String, StartWith As Integer = 0) As Integer
 		  ' Locates the index of the cookie matching the CookieName and CookieDomain parameters. To continue searching from
 		  ' a previous index specify the StartWith parameter. If CookieDomain is "" then all domains match. If CookieName
-		  ' is "" then all cookies for CookieDomain match. 
+		  ' is "" then all cookies for CookieDomain match.
 		  
 		  Dim u As Dictionary = ParseURL(CookieDomain)
 		  CookieDomain = u.Value("host")
@@ -163,7 +190,7 @@ Protected Class CookieEngine
 		      If CookieDomain = "" Then Return i
 		      d = Me.Domain(i)
 		      If d = "" Then Return i
-		      If CompareDomains(CookieDomain, d) Then Return i
+		      If CompareDomains(CookieDomain, d, HostOnly(i)) Then Return i
 		    End If
 		  Next
 		  Return -1
@@ -181,7 +208,7 @@ Protected Class CookieEngine
 	#tag Method, Flags = &h0
 		Sub ParseResponseHeaders(URL As String, ResponseHeaders As InternetHeaders)
 		  ' Collect all the Set-Cookie: headers in the specified HTTP response headers.
-		  ' If a Set-Cookie: header specifies a domain other than the one contained in the 
+		  ' If a Set-Cookie: header specifies a domain other than the one contained in the
 		  ' URL parameter then an exception will be raised.
 		  
 		  If ResponseHeaders = Nil Then Return
@@ -189,6 +216,7 @@ Protected Class CookieEngine
 		  For i As Integer = 0 To ResponseHeaders.Count - 1
 		    If ResponseHeaders.Name(i) = "Set-Cookie" Then
 		      Dim nm, vl, dm, pth, meta, data As String
+		      Dim secure, httponly As Boolean
 		      Dim d As Dictionary = ParseURL(URL)
 		      dm = d.Value("host")
 		      Dim ex As Date
@@ -206,17 +234,21 @@ Protected Class CookieEngine
 		          v = NthField(item, "=", 2)
 		          Select Case k.Trim
 		          Case "Domain"
-		            If Not CompareDomains(v, URL) Then Raise New RuntimeException
+		            If Not CompareDomains(v, URL, True) Then Raise New RuntimeException
 		            dm = v
 		          Case "Path"
 		            pth = v
 		          Case "Expires"
 		            ex = TimeStamp(v)
+		          Case "httpOnly"
+		            httponly = True
+		          Case "secure"
+		            secure = True
 		          End Select
 		        Next
 		      End If
 		      
-		      Me.SetCookie(nm, vl, dm, ex, pth)
+		      Me.SetCookie(nm, vl, dm, ex, pth, httponly, secure)
 		    End If
 		  Next
 		End Sub
@@ -338,11 +370,12 @@ Protected Class CookieEngine
 		  Dim tos As TextOutputStream = TextOutputStream.Create(CookieJar)
 		  tos.Delimiter = EndOfLine.Windows
 		  tos.WriteLine("# Netscape HTTP Cookie File")
-		  tos.WriteLine("# Domain" + Chr(9) + "Flag" + Chr(9) + "Path" + Chr(9) + "Secure" + Chr(9) + "Expiration" + Chr(9) + "Name" + Chr(9) + "Value")
+		  tos.WriteLine("# Domain" + Chr(9) + "Include subdomains" + Chr(9) + "Path" + Chr(9) + "HTTPS only" + Chr(9) + "Expiration" + Chr(9) + "Name" + Chr(9) + "Value")
 		  For i As Integer = 0 To UBound(mCookies)
 		    Dim d As Dictionary = mCookies(i)
-		    Dim secure, expires As String
+		    Dim secure, hostonly, expires As String
 		    If d.Lookup("secure", False) Then secure = "TRUE" Else secure = "FALSE"
+		    If d.Lookup("hostonly", False) Then hostonly = "TRUE" Else hostonly = "FALSE"
 		    Dim expiry As Date = d.Lookup("expires", Nil)
 		    If expiry = Nil Then
 		      If Not IncludeSessionCookies Then Continue
@@ -351,7 +384,7 @@ Protected Class CookieEngine
 		      Dim epoch As New Date(1970, 1, 1, 0, 0, 0, 0.0) 'UNIX epoch
 		      expires = Format(expiry.TotalSeconds - epoch.TotalSeconds, "###############################0")
 		    End If
-		    tos.WriteLine(d.Value("domain") + Chr(9) + "TRUE" + Chr(9) + d.Lookup("path", "/") + Chr(9) + secure _
+		    tos.WriteLine(d.Value("domain") + Chr(9) + hostonly + Chr(9) + d.Lookup("path", "/") + Chr(9) + secure _
 		    + Chr(9) + expires + Chr(9) + d.Value("name") + Chr(9) + d.Value("value"))
 		  Next
 		  tos.WriteLine("")
@@ -360,9 +393,9 @@ Protected Class CookieEngine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub SetCookie(Name As String, Value As String, Domain As String, Optional Expires As Date, Optional Path As String)
+		Sub SetCookie(Name As String, Value As String, Domain As String, Optional Expires As Date, Optional Path As String, Optional HTTPOnly As Boolean, Optional SSLOnly As Boolean)
 		  ' Sets a cookie for the cookie engine to use. If a cookie with the same name
-		  ' and domain already exists it will be updated. 
+		  ' and domain already exists it will be updated.
 		  
 		  Dim cookie As Dictionary
 		  Dim index As Integer = Me.Lookup(Name, Domain)
@@ -374,13 +407,24 @@ Protected Class CookieEngine
 		  End If
 		  cookie.Value("name") = Name
 		  cookie.Value("value") = Value
+		  cookie.Value("hostonly") = (Domain <> "")
 		  Dim d As Dictionary = ParseURL(Domain)
 		  Domain = d.Value("host")
 		  cookie.Value("domain") = Domain
 		  If Expires <> Nil Then cookie.Value("expires") = Expires
 		  If Path <> "" Then cookie.Value("path") = Path
-		  
+		  cookie.Value("hostonly") = False
+		  cookie.Value("httponly") = HTTPOnly
+		  cookie.Value("secure") = SSLOnly
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function SSLOnly(Index As Integer) As Boolean
+		  ' If True then this cookie should not be sent over an insecure connection.
+		  
+		  Return mCookies(Index).Lookup("secure", False)
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h21

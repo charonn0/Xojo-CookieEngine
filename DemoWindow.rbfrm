@@ -437,8 +437,12 @@ End
 		Private Sub UpdateCookieList()
 		  CookieList.DeleteAllRows
 		  If mCookieEngine = Nil Then mCookieEngine = New CookieEngine
+		  
+		  ' Find the first cookie that matches the name and value search parameters.
 		  Dim i As Integer = mCookieEngine.Lookup(CookieSearchName.Text, CookieSearchDomain.Text, 0)
+		  
 		  Do Until i <= -1
+		    ' Add the cookie to the CookieList
 		    Dim expire As String
 		    Dim d As Date = mCookieEngine.Expires(i)
 		    If d <> Nil Then expire = d.SQLDateTime
@@ -466,7 +470,10 @@ End
 		    End If
 		    
 		    CookieList.RowTag(CookieList.LastIndex) = i
+		    
+		    ' find the next cookie that matches the name and value search parameters.
 		    i = mCookieEngine.Lookup(CookieSearchName.Text, CookieSearchDomain.Text, i + 1)
+		    
 		  Loop
 		  CookiesTotal.Text = "Cookies known: " + Format(mCookieEngine.Count, "###,###,##0")
 		  CookiesShown.Text = "Cookies shown: " + Format(CookieList.ListCount, "###,###,##0")

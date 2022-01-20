@@ -111,13 +111,18 @@ Protected Class CookieEngine
 		  '    MyHTTPSocket.SetRequestHeader("Cookie", ReturnValue)
 		  
 		  Dim i As Integer = Me.Lookup("", URL, 0)
+		  Dim u As Dictionary = ParseURL(URL)
+		  Dim ssl As Boolean = (u.Lookup("scheme", "http") = "https")
 		  Dim cookies() As String
 		  Dim now As New Date
 		  Do Until i <= -1
 		    Dim expire As Date = Me.Expires(i)
-		    If expire = Nil Or expire.TotalSeconds > now.TotalSeconds Then
+		    If (expire = Nil Or expire.TotalSeconds > now.TotalSeconds) Or _
+		      (ssl = Me.SSLOnly(i)) Or _
+		      (Me.HostOnly(i) And Not CompareDomains(u.Lookup("host", ""), Me.Domain(i), Not Me.HostOnly(i))) Then
 		      cookies.Append(Me.Name(i) + "=" + Me.Value(i))
 		    End If
+		    
 		    i = Me.Lookup("", URL, i + 1)
 		  Loop
 		  
@@ -175,9 +180,10 @@ Protected Class CookieEngine
 
 	#tag Method, Flags = &h0
 		Function Lookup(CookieName As String, CookieDomain As String, StartWith As Integer = 0) As Integer
-		  ' Locates the index of the cookie matching the CookieName and CookieDomain parameters. To continue searching from
-		  ' a previous index specify the StartWith parameter. If CookieDomain is "" then all domains match. If CookieName
-		  ' is "" then all cookies for CookieDomain match.
+		  ' Locates the index of the cookie matching the CookieName and CookieDomain parameters.
+		  ' To continue searching from a previous index specify the StartWith parameter. If
+		  ' CookieDomain is "" then all domains match. If CookieName is "" then all cookies for
+		  ' CookieDomain match.
 		  
 		  Dim u As Dictionary = ParseURL(CookieDomain)
 		  CookieDomain = u.Value("host")
@@ -190,7 +196,7 @@ Protected Class CookieEngine
 		      If CookieDomain = "" Then Return i
 		      d = Me.Domain(i)
 		      If d = "" Then Return i
-		      If CompareDomains(CookieDomain, d, HostOnly(i)) Then Return i
+		      If CompareDomains(CookieDomain, d, Not Me.HostOnly(i)) Then Return i
 		    End If
 		  Next
 		  Return -1

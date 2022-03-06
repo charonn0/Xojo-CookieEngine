@@ -158,6 +158,8 @@ Protected Class CookieEngine
 
 	#tag Method, Flags = &h0
 		Sub Load(CookieJar As FolderItem)
+		  ' Load cookies from a Nescape cookiejar file
+		  
 		  Dim tis As TextInputStream = TextInputStream.Open(CookieJar)
 		  While Not tis.EOF
 		    Dim line As String = tis.ReadLine
@@ -375,6 +377,8 @@ Protected Class CookieEngine
 
 	#tag Method, Flags = &h0
 		Sub Save(CookieJar As FolderItem, IncludeSessionCookies As Boolean = False)
+		  ' Save all currently known cookies to a file in Netscape cookiejar format.
+		  
 		  Dim tos As TextOutputStream = TextOutputStream.Create(CookieJar)
 		  tos.Delimiter = EndOfLine.Windows
 		  tos.WriteLine("# Netscape HTTP Cookie File")

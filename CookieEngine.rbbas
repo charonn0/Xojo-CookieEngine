@@ -419,7 +419,7 @@ Protected Class CookieEngine
 		    cookie = New Dictionary
 		    mCookies.Append(cookie)
 		  End If
-		  If InStr(Name, "%") > 0 Or InStr(Value, "%") > 0 Then Break
+		  
 		  cookie.Value("name") = DecodeURLComponent(Name)
 		  cookie.Value("value") = DecodeURLComponent(Value)
 		  cookie.Value("hostonly") = (Domain <> "")

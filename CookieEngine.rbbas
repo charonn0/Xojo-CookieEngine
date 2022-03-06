@@ -38,6 +38,7 @@ Protected Class CookieEngine
 	#tag Method, Flags = &h0
 		Sub Delete(Index As Integer)
 		  ' Removes the specified cookie.
+		  ' https://github.com/charonn0/Xojo-CookieEngine/wiki/CookieEngine.Delete
 		  
 		  mCookies.Remove(Index)
 		End Sub
@@ -46,6 +47,7 @@ Protected Class CookieEngine
 	#tag Method, Flags = &h0
 		Sub DeleteAll()
 		  ' Removes all cookies.
+		  ' https://github.com/charonn0/Xojo-CookieEngine/wiki/CookieEngine.DeleteAll
 		  
 		  Redim mCookies(-1)
 		End Sub
@@ -54,6 +56,7 @@ Protected Class CookieEngine
 	#tag Method, Flags = &h0
 		Sub DeleteExpired()
 		  ' Removes all expired cookies.
+		  ' https://github.com/charonn0/Xojo-CookieEngine/wiki/CookieEngine.DeleteExpired
 		  
 		  Dim now As New Date
 		  For i As Integer = Me.Count - 1 DownTo 0
@@ -66,6 +69,7 @@ Protected Class CookieEngine
 	#tag Method, Flags = &h0
 		Sub DeleteSession()
 		  ' Removes all session cookies.
+		  ' https://github.com/charonn0/Xojo-CookieEngine/wiki/CookieEngine.DeleteSession
 		  
 		  For i As Integer = Me.Count - 1 DownTo 0
 		    If Me.Expires(i) = Nil Then mCookies.Remove(i)
@@ -76,6 +80,7 @@ Protected Class CookieEngine
 	#tag Method, Flags = &h0
 		Function Domain(Index As Integer) As String
 		  ' If the specified cookie has a "domain" attribute then it is returned.
+		  ' https://github.com/charonn0/Xojo-CookieEngine/wiki/CookieEngine.Domain
 		  
 		  Return mCookies(Index).Lookup("domain", "")
 		End Function
@@ -85,6 +90,7 @@ Protected Class CookieEngine
 		Function Expires(Index As Integer) As Date
 		  ' If the specified cookie has a "expires" attribute then it is returned.
 		  ' If this method returns NIL then the cookie expires at the end of the session.
+		  ' https://github.com/charonn0/Xojo-CookieEngine/wiki/CookieEngine.Expires
 		  
 		  Return mCookies(Index).Lookup("expires", Nil)
 		End Function
@@ -94,6 +100,7 @@ Protected Class CookieEngine
 		Sub Expires(Index As Integer, Assigns NewExpiry As Date)
 		  ' Updates or removes the expiration date attribute of the specified cookie.
 		  ' Setting the expiration to NIL makes the cookie a "session" cookie.
+		  ' https://github.com/charonn0/Xojo-CookieEngine/wiki/CookieEngine.Expires
 		  
 		  Dim cookie As Dictionary = mCookies(Index)
 		  If cookie.HasKey("expires") Then cookie.Remove("expires")
@@ -109,6 +116,7 @@ Protected Class CookieEngine
 		  '    MyURLConnection.RequestHeader("Cookie") = ReturnValue
 		  '  or
 		  '    MyHTTPSocket.SetRequestHeader("Cookie", ReturnValue)
+		  ' https://github.com/charonn0/Xojo-CookieEngine/wiki/CookieEngine.GenerateRequestHeader
 		  
 		  Dim i As Integer = Me.Lookup("", URL, 0)
 		  Dim u As Dictionary = ParseURL(URL)
@@ -159,6 +167,7 @@ Protected Class CookieEngine
 	#tag Method, Flags = &h0
 		Sub Load(CookieJar As FolderItem)
 		  ' Load cookies from a Nescape cookiejar file
+		  ' https://github.com/charonn0/Xojo-CookieEngine/wiki/CookieEngine.Load
 		  
 		  Dim tis As TextInputStream = TextInputStream.Open(CookieJar)
 		  While Not tis.EOF
@@ -190,6 +199,7 @@ Protected Class CookieEngine
 		  ' To continue searching from a previous index specify the StartWith parameter. If
 		  ' CookieDomain is "" then all domains match. If CookieName is "" then all cookies for
 		  ' CookieDomain match.
+		  ' https://github.com/charonn0/Xojo-CookieEngine/wiki/CookieEngine.Lookup
 		  
 		  Dim u As Dictionary = ParseURL(CookieDomain)
 		  CookieDomain = u.Value("host")
@@ -212,6 +222,7 @@ Protected Class CookieEngine
 	#tag Method, Flags = &h0
 		Function Name(Index As Integer) As String
 		  ' Returns the name of the specified cookie.
+		  ' https://github.com/charonn0/Xojo-CookieEngine/wiki/CookieEngine.Name
 		  
 		  Return mCookies(Index).Value("name")
 		End Function
@@ -222,6 +233,7 @@ Protected Class CookieEngine
 		  ' Collect all the Set-Cookie: headers in the specified HTTP response headers.
 		  ' If a Set-Cookie: header specifies a domain other than the one contained in the
 		  ' URL parameter then an exception will be raised.
+		  ' https://github.com/charonn0/Xojo-CookieEngine/wiki/CookieEngine.ParseResponseHeaders
 		  
 		  If ResponseHeaders = Nil Then Return
 		  
@@ -271,6 +283,7 @@ Protected Class CookieEngine
 		  ' For use with the URLConnection class. If you're seeing compile errors in this method it's because
 		  ' you're using an older version of Xojo that doesn't have the URLConnection class. Simply delete this
 		  ' method to eliminate the errors.
+		  ' https://github.com/charonn0/Xojo-CookieEngine/wiki/CookieEngine.ParseResponseHeaders
 		  
 		  If ResponseHeaders = Nil Then Return
 		  Dim h As New InternetHeaders
@@ -372,6 +385,7 @@ Protected Class CookieEngine
 	#tag Method, Flags = &h0
 		Function Path(Index As Integer) As String
 		  ' If the cookie has the "path" attribute then it is returned.
+		  ' https://github.com/charonn0/Xojo-CookieEngine/wiki/CookieEngine.Path
 		  
 		  Return mCookies(Index).Lookup("path", "")
 		End Function
@@ -380,6 +394,7 @@ Protected Class CookieEngine
 	#tag Method, Flags = &h0
 		Sub Save(CookieJar As FolderItem, IncludeSessionCookies As Boolean = False)
 		  ' Save all currently known cookies to a file in Netscape cookiejar format.
+		  ' https://github.com/charonn0/Xojo-CookieEngine/wiki/CookieEngine.Save
 		  
 		  Dim tos As TextOutputStream = TextOutputStream.Create(CookieJar)
 		  tos.Delimiter = EndOfLine.Windows
@@ -410,6 +425,7 @@ Protected Class CookieEngine
 		Sub SetCookie(Name As String, Value As String, Domain As String, Optional Expires As Date, Optional Path As String, Optional HTTPOnly As Boolean, Optional SSLOnly As Boolean)
 		  ' Sets a cookie for the cookie engine to use. If a cookie with the same name
 		  ' and domain already exists it will be updated.
+		  ' https://github.com/charonn0/Xojo-CookieEngine/wiki/CookieEngine.SetCookie
 		  
 		  Dim cookie As Dictionary
 		  Dim index As Integer = Me.Lookup(Name, Domain)
@@ -556,20 +572,57 @@ Protected Class CookieEngine
 
 	#tag Method, Flags = &h0
 		Function Value(Index As Integer) As String
+		  ' Returns the value of the cookie at Index.
+		  ' https://github.com/charonn0/Xojo-CookieEngine/wiki/CookieEngine.Value
+		  
 		  Return mCookies(Index).Value("value")
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub Value(Index As Integer, Assigns NewValue As String)
+		  ' Updates the value of the cookie at Index.
+		  ' https://github.com/charonn0/Xojo-CookieEngine/wiki/CookieEngine.Value
+		  
 		  mCookies(Index).Value("value") = NewValue
 		End Sub
 	#tag EndMethod
 
 
+	#tag Note, Name = Copying
+		MIT License
+		
+		Copyright (c) 2021-22 Andrew Lambert
+		https://github.com/charonn0/Xojo-CookieEngine
+		
+		Permission is hereby granted, free of charge, to any person obtaining a copy
+		of this software and associated documentation files (the "Software"), to deal
+		in the Software without restriction, including without limitation the rights
+		to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+		copies of the Software, and to permit persons to whom the Software is
+		furnished to do so, subject to the following conditions:
+		
+		The above copyright notice and this permission notice shall be included in all
+		copies or substantial portions of the Software.
+		
+		THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+		IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+		FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+		AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+		LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+		OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+		SOFTWARE.
+		
+		
+	#tag EndNote
+
+
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
+			  ' Returns the number of cookies known.
+			  ' https://github.com/charonn0/Xojo-CookieEngine/wiki/CookieEngine.Count
+			  
 			  return UBound(mCookies) + 1
 			End Get
 		#tag EndGetter

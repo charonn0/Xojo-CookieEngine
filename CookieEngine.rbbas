@@ -173,10 +173,12 @@ Protected Class CookieEngine
 		    expiration = NthField(line, Chr(9), 5)
 		    name = NthField(line, Chr(9), 6)
 		    value = NthField(line, Chr(9), 7)
-		    Dim exp As New Date(1970, 1, 1, 0, 0, 0, 0.0) 'UNIX epoch
-		    exp.TotalSeconds = exp.TotalSeconds + Val(expiration)
-		    mCookies.Append(New Dictionary("name":name, "value":value, "domain":domain, "path":path, _
-		    "secure":secure = "TRUE", "expires":exp, "hostonly":hostonly = "TRUE"))
+		    Dim exp As Date
+		    If Val(expiration) > 0 Then
+		      exp = New Date(1970, 1, 1, 0, 0, 0, 0.0) 'UNIX epoch
+		      exp.TotalSeconds = exp.TotalSeconds + Val(expiration)
+		    End If
+		    SetCookie(name, value, domain, exp, path, False, secure = "TRUE")
 		  Wend
 		  tis.Close
 		End Sub

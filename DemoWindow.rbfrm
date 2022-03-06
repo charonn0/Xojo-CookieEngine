@@ -7,27 +7,28 @@ Begin Window DemoWindow
    Frame           =   0
    FullScreen      =   False
    HasBackColor    =   False
-   Height          =   3.91e+2
+   HasFullScreenButton=   False
+   Height          =   391
    ImplicitInstance=   True
-   LiveResize      =   True
+   LiveResize      =   "True"
    MacProcID       =   0
    MaxHeight       =   32000
    MaximizeButton  =   True
    MaxWidth        =   32000
-   MenuBar         =   ""
+   MenuBar         =   0
    MenuBarVisible  =   True
-   MinHeight       =   64
+   MinHeight       =   391
    MinimizeButton  =   True
-   MinWidth        =   64
+   MinWidth        =   725
    Placement       =   2
    Resizeable      =   True
    Title           =   "CookieEngine Demo"
    Visible         =   True
-   Width           =   7.01e+2
+   Width           =   725
    Begin Listbox CookieList
       AutoDeactivate  =   True
       AutoHideScrollbars=   True
-      Bold            =   ""
+      Bold            =   False
       Border          =   True
       ColumnCount     =   8
       ColumnsResizable=   True
@@ -36,50 +37,53 @@ Begin Window DemoWindow
       DataSource      =   ""
       DefaultRowHeight=   -1
       Enabled         =   True
-      EnableDrag      =   ""
-      EnableDragReorder=   ""
+      EnableDrag      =   False
+      EnableDragReorder=   False
       GridLinesHorizontal=   0
       GridLinesVertical=   0
       HasHeading      =   True
       HeadingIndex    =   -1
-      Height          =   252
+      Height          =   269
       HelpTag         =   ""
-      Hierarchical    =   ""
+      Hierarchical    =   False
       Index           =   -2147483648
       InitialParent   =   ""
       InitialValue    =   "Name	Value	Domain	Expires	Path	HTTP Only	SSL Only	Host Only"
-      Italic          =   ""
+      Italic          =   False
       Left            =   7
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   True
       LockTop         =   True
-      RequiresSelection=   ""
+      RequiresSelection=   False
       Scope           =   0
       ScrollbarHorizontal=   True
       ScrollBarVertical=   True
-      SelectionType   =   0
+      SelectionType   =   1
+      ShowDropIndicator=   False
       TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
-      Top             =   100
-      Underline       =   ""
+      Top             =   83
+      Transparent     =   True
+      Underline       =   False
       UseFocusRing    =   True
       Visible         =   True
-      Width           =   687
+      Width           =   711
+      _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
    Begin TextField CookieSearchName
-      AcceptTabs      =   ""
+      AcceptTabs      =   False
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &hFFFFFF
-      Bold            =   ""
+      BackColor       =   &cFFFFFF00
+      Bold            =   False
       Border          =   True
       CueText         =   "Cookie Name"
       DataField       =   ""
@@ -89,7 +93,7 @@ Begin Window DemoWindow
       Height          =   22
       HelpTag         =   ""
       Index           =   -2147483648
-      Italic          =   ""
+      Italic          =   False
       Left            =   7
       LimitText       =   0
       LockBottom      =   True
@@ -98,37 +102,38 @@ Begin Window DemoWindow
       LockRight       =   False
       LockTop         =   False
       Mask            =   ""
-      Password        =   ""
-      ReadOnly        =   ""
+      Password        =   False
+      ReadOnly        =   False
       Scope           =   0
       TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   ""
-      TextColor       =   &h000000
+      TextColor       =   &c00000000
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   358
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
       UseFocusRing    =   True
       Visible         =   True
       Width           =   253
    End
    Begin PushButton CookieLookupButton
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       ButtonStyle     =   0
-      Cancel          =   ""
+      Cancel          =   False
       Caption         =   "Lookup"
-      Default         =   ""
+      Default         =   False
       Enabled         =   True
       Height          =   22
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
-      Left            =   621
+      Italic          =   False
+      Left            =   645
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   False
@@ -139,20 +144,21 @@ Begin Window DemoWindow
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   358
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
       Visible         =   True
       Width           =   73
    End
    Begin TextField CookieSearchDomain
-      AcceptTabs      =   ""
+      AcceptTabs      =   False
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &hFFFFFF
-      Bold            =   ""
+      BackColor       =   &cFFFFFF00
+      Bold            =   False
       Border          =   True
       CueText         =   "Cookie Domain"
       DataField       =   ""
@@ -162,7 +168,7 @@ Begin Window DemoWindow
       Height          =   22
       HelpTag         =   ""
       Index           =   -2147483648
-      Italic          =   ""
+      Italic          =   False
       Left            =   264
       LimitText       =   0
       LockBottom      =   True
@@ -171,26 +177,27 @@ Begin Window DemoWindow
       LockRight       =   True
       LockTop         =   False
       Mask            =   ""
-      Password        =   ""
-      ReadOnly        =   ""
+      Password        =   False
+      ReadOnly        =   False
       Scope           =   0
       TabIndex        =   3
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   ""
-      TextColor       =   &h000000
+      TextColor       =   &c00000000
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   358
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
       UseFocusRing    =   True
       Visible         =   True
-      Width           =   354
+      Width           =   378
    End
    Begin Label CookiesTotal
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       DataField       =   ""
       DataSource      =   ""
       Enabled         =   True
@@ -198,33 +205,34 @@ Begin Window DemoWindow
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   7
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   False
-      Multiline       =   ""
+      Multiline       =   False
       Scope           =   0
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Cookies known: 0"
       TextAlign       =   2
-      TextColor       =   &h000000
+      TextColor       =   &c00000000
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
-      Top             =   77
+      Top             =   59
       Transparent     =   True
-      Underline       =   ""
+      Underline       =   False
       Visible         =   True
       Width           =   108
    End
    Begin Label CookiesShown
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       DataField       =   ""
       DataSource      =   ""
       Enabled         =   True
@@ -232,44 +240,45 @@ Begin Window DemoWindow
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   183
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   False
-      Multiline       =   ""
+      Multiline       =   False
       Scope           =   0
       Selectable      =   False
       TabIndex        =   6
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Cookies shown: 0"
       TextAlign       =   2
-      TextColor       =   &h000000
+      TextColor       =   &c00000000
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
-      Top             =   77
+      Top             =   59
       Transparent     =   True
-      Underline       =   ""
+      Underline       =   False
       Visible         =   True
       Width           =   108
    End
-   Begin PushButton WriteCookies
+   Begin PushButton WriteCookiesButton
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       ButtonStyle     =   0
-      Cancel          =   ""
+      Cancel          =   False
       Caption         =   "Save to file..."
-      Default         =   ""
+      Default         =   False
       Enabled         =   True
       Height          =   22
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
-      Left            =   299
+      Italic          =   False
+      Left            =   127
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
@@ -280,27 +289,28 @@ Begin Window DemoWindow
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
-      Top             =   43
-      Underline       =   ""
+      Top             =   34
+      Transparent     =   True
+      Underline       =   False
       Visible         =   True
       Width           =   115
    End
-   Begin PushButton ReadCookies
+   Begin PushButton ReadCookiesButton
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       ButtonStyle     =   0
-      Cancel          =   ""
+      Cancel          =   False
       Caption         =   "Load from file..."
-      Default         =   ""
+      Default         =   False
       Enabled         =   True
       Height          =   22
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
-      Left            =   414
+      Italic          =   False
+      Left            =   246
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
@@ -311,27 +321,28 @@ Begin Window DemoWindow
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
-      Top             =   43
-      Underline       =   ""
+      Top             =   34
+      Transparent     =   True
+      Underline       =   False
       Visible         =   True
       Width           =   115
    End
    Begin PushButton NewCookieSessionButton
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       ButtonStyle     =   0
-      Cancel          =   ""
+      Cancel          =   False
       Caption         =   "New Session"
-      Default         =   ""
+      Default         =   False
       Enabled         =   True
       Height          =   22
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
-      Left            =   183
+      Italic          =   False
+      Left            =   7
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
@@ -342,28 +353,29 @@ Begin Window DemoWindow
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
-      Top             =   43
-      Underline       =   ""
+      Top             =   34
+      Transparent     =   True
+      Underline       =   False
       Visible         =   True
       Width           =   115
    End
    Begin PushButton GetURLBtn
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       ButtonStyle     =   0
-      Cancel          =   ""
+      Cancel          =   False
       Caption         =   "Get"
-      Default         =   ""
+      Default         =   False
       Enabled         =   True
       Height          =   22
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
-      Left            =   614
-      LockBottom      =   ""
+      Italic          =   False
+      Left            =   638
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   False
       LockRight       =   True
@@ -373,20 +385,21 @@ Begin Window DemoWindow
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   9
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
       Visible         =   True
       Width           =   80
    End
    Begin TextField URLField
-      AcceptTabs      =   ""
+      AcceptTabs      =   False
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &hFFFFFF
-      Bold            =   ""
+      BackColor       =   &cFFFFFF00
+      Bold            =   False
       Border          =   True
       CueText         =   "https://www.example.com/index.php?foo=bar"
       DataField       =   ""
@@ -396,31 +409,128 @@ Begin Window DemoWindow
       Height          =   22
       HelpTag         =   ""
       Index           =   -2147483648
-      Italic          =   ""
+      Italic          =   False
       Left            =   7
       LimitText       =   0
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   True
       LockTop         =   True
       Mask            =   ""
-      Password        =   ""
-      ReadOnly        =   ""
+      Password        =   False
+      ReadOnly        =   False
       Scope           =   0
       TabIndex        =   11
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   ""
-      TextColor       =   &h000000
+      TextColor       =   &c00000000
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   9
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
       UseFocusRing    =   True
       Visible         =   True
-      Width           =   602
+      Width           =   626
+   End
+   Begin PushButton DeleteAllSessionButton
+      AutoDeactivate  =   True
+      Bold            =   False
+      ButtonStyle     =   0
+      Cancel          =   False
+      Caption         =   "Delete all"
+      Default         =   False
+      Enabled         =   True
+      Height          =   22
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   365
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   False
+      Scope           =   0
+      TabIndex        =   12
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   0.0
+      TextUnit        =   0
+      Top             =   34
+      Transparent     =   True
+      Underline       =   False
+      Visible         =   True
+      Width           =   115
+   End
+   Begin PushButton DeleteExpiredButton
+      AutoDeactivate  =   True
+      Bold            =   False
+      ButtonStyle     =   0
+      Cancel          =   False
+      Caption         =   "Delete expired"
+      Default         =   False
+      Enabled         =   True
+      Height          =   22
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   602
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   False
+      Scope           =   0
+      TabIndex        =   13
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   0.0
+      TextUnit        =   0
+      Top             =   34
+      Transparent     =   True
+      Underline       =   False
+      Visible         =   True
+      Width           =   115
+   End
+   Begin PushButton DeleteSelectedButton
+      AutoDeactivate  =   True
+      Bold            =   False
+      ButtonStyle     =   0
+      Cancel          =   False
+      Caption         =   "Delete selected"
+      Default         =   False
+      Enabled         =   True
+      Height          =   22
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   484
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   False
+      Scope           =   0
+      TabIndex        =   14
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   0.0
+      TextUnit        =   0
+      Top             =   34
+      Transparent     =   True
+      Underline       =   False
+      Visible         =   True
+      Width           =   115
    End
 End
 #tag EndWindow
@@ -443,7 +553,7 @@ End
 		  
 		  Do Until i <= -1
 		    ' Add the cookie to the CookieList
-		    Dim expire As String
+		    Dim expire As String = "End of session"
 		    Dim d As Date = mCookieEngine.Expires(i)
 		    If d <> Nil Then expire = d.SQLDateTime
 		    CookieList.AddRow(mCookieEngine.Name(i), mCookieEngine.Value(i), mCookieEngine.Domain(i), expire, mCookieEngine.Path(i))
@@ -535,7 +645,7 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events WriteCookies
+#tag Events WriteCookiesButton
 	#tag Event
 		Sub Action()
 		  Dim f As FolderItem = GetSaveFolderItem("", "cookies.txt")
@@ -546,7 +656,7 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events ReadCookies
+#tag Events ReadCookiesButton
 	#tag Event
 		Sub Action()
 		  Dim f As FolderItem = GetOpenFolderItem(".txt;.jar;.cookies")
@@ -581,6 +691,43 @@ End
 		    Call connection.Get(url, 10)
 		    mCookieEngine.ParseResponseHeaders(url, connection.PageHeaders)
 		  #EndIf
+		  MsgBox("Request complete")
+		  UpdateCookieList()
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events DeleteAllSessionButton
+	#tag Event
+		Sub Action()
+		  mCookieEngine.DeleteAll()
+		  UpdateCookieList()
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events DeleteExpiredButton
+	#tag Event
+		Sub Action()
+		  mCookieEngine.DeleteExpired()
+		  UpdateCookieList()
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events DeleteSelectedButton
+	#tag Event
+		Sub Action()
+		  Dim deletedindices() As Integer
+		  For i As Integer = 0 To CookieList.ListCount - 1
+		    If CookieList.Selected(i) Then 
+		      deletedindices.Append(CookieList.RowTag(i))
+		    End If
+		  Next
+		  
+		  deletedindices.Sort()
+		  
+		  For i As Integer = UBound(deletedindices) DownTo 0
+		    mCookieEngine.Delete(deletedindices(i))
+		  Next i
+		  
 		  UpdateCookieList()
 		End Sub
 	#tag EndEvent

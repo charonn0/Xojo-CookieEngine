@@ -120,7 +120,9 @@ Protected Class CookieEngine
 		    If (expire = Nil Or expire.TotalSeconds > now.TotalSeconds) Or _
 		      (ssl = Me.SSLOnly(i)) Or _
 		      (Me.HostOnly(i) And Not CompareDomains(u.Lookup("host", ""), Me.Domain(i), Not Me.HostOnly(i))) Then
-		      cookies.Append(Me.Name(i) + "=" + Me.Value(i))
+		      Dim nm As String = EncodeURLComponent(Me.Name(i))
+		      Dim vl As String = EncodeURLComponent(Me.Value(i))
+		      cookies.Append(nm + "=" + vl)
 		    End If
 		    
 		    i = Me.Lookup("", URL, i + 1)
@@ -411,8 +413,9 @@ Protected Class CookieEngine
 		    cookie = New Dictionary
 		    mCookies.Append(cookie)
 		  End If
-		  cookie.Value("name") = Name
-		  cookie.Value("value") = Value
+		  If InStr(Name, "%") > 0 Or InStr(Value, "%") > 0 Then Break
+		  cookie.Value("name") = DecodeURLComponent(Name)
+		  cookie.Value("value") = DecodeURLComponent(Value)
 		  cookie.Value("hostonly") = (Domain <> "")
 		  Dim d As Dictionary = ParseURL(Domain)
 		  Domain = d.Value("host")

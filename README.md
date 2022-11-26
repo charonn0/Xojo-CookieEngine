@@ -7,7 +7,7 @@ If you are on an older version of Xojo (or still using RealStudio) then you must
 ## Example
 
 ### Xojo URLConnection
-```xojo
+```realbasic
 Dim engine As New CookieEngine ' create a new, empty CookieEngine
 engine.Load(GetFolderItem("cookies.txt")) ' optionally load cookies from a file
 engine.SetCookie("foo", "bar", ".example.com") ' set cookies manually
@@ -30,7 +30,7 @@ engine.Save(GetFolderItem("cookies.txt"))
 ```
 
 ### RealStudio HTTPSecureSocket
-```xojo
+```realbasic
 Dim engine As New CookieEngine ' create a new, empty CookieEngine
 engine.Load(GetFolderItem("cookies.txt")) ' optionally load cookies from a file
 engine.SetCookie("foo", "bar", ".example.com") ' set cookies manually

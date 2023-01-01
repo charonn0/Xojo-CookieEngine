@@ -592,7 +592,7 @@ Protected Class CookieEngine
 	#tag Note, Name = Copying
 		MIT License
 		
-		Copyright (c) 2021-22 Andrew Lambert
+		Copyright (c) 2021-23 Andrew Lambert
 		https://github.com/charonn0/Xojo-CookieEngine
 		
 		Permission is hereby granted, free of charge, to any person obtaining a copy

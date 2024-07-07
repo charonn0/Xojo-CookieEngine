@@ -50,3 +50,6 @@ engine.ParseResponseHeaders(url, connection.PageHeaders)
 ' optionally save cookies to a file
 engine.Save(GetFolderItem("cookies.txt"))
 ```
+
+## Become a sponsor
+If you use this code in a commercial project, or just want to show your appreciation, please consider sponsoring me through GitHub. https://github.com/sponsors/charonn0
